@@ -5,9 +5,9 @@ import { flushPromises } from '@vue/test-utils';
 let response = '{}';
 
 const slowPromise = (resolveValue = '') =>
-  new Promise<string>((res, rej) => setTimeout(() => res(resolveValue), 10));
+  new Promise<string>((res) => setTimeout(() => res(resolveValue), 10));
 const awaiter = (delay = 11) =>
-  new Promise<void>((res, rej) => setTimeout(() => res(), delay));
+  new Promise<void>((res) => setTimeout(() => res(), delay));
 const fetchMock = vi.fn(() =>
   Promise.resolve({ text: () => Promise.resolve(response) }),
 );

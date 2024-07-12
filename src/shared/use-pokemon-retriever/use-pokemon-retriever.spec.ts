@@ -14,7 +14,7 @@ vi.mock('@/shared/use-requestor', () => ({
 describe('testing use-pokemon-retriever', () => {
   it('should start retrieving pokemon list when instantiated', async () => {
     addPriorityRequest.mockImplementationOnce(
-      (url: string, callback: (data: any) => void) => {
+      (_: string, callback: (data: any) => void) => {
         callback({ next: 'nextUrl', results: [{ name: 'pikachu' }] });
       },
     );
@@ -38,7 +38,7 @@ describe('testing use-pokemon-retriever', () => {
 
   it('should retrieve a pokemon by name', async () => {
     addPriorityRequest.mockImplementationOnce(
-      (url: string, callback: (data: any) => void) => {
+      (_: string, callback: (data: any) => void) => {
         callback({ name: 'pikachu', id: 25 });
       },
     );

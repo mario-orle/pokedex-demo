@@ -1,5 +1,5 @@
 import { compress, decompress } from 'smol-string/worker';
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 
 interface CachedResource {
   [key: string]: string;

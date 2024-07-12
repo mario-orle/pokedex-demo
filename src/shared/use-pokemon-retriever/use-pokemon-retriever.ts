@@ -23,7 +23,7 @@ function setup(): UsePokemonRetriever {
   const { addRequest, addPriorityRequest } = useRequestor();
 
   async function getByName(name: string): Promise<Pokemon> {
-    return new Promise((res, rej) => {
+    return new Promise((res) => {
       addPriorityRequest<Pokemon>(
         `${apiBaseUrl}/pokemon/${name}`,
         (pokemonResponse) => {
