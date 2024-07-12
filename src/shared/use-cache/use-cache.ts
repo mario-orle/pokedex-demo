@@ -28,7 +28,6 @@ async function setup(): Promise<UseCache> {
 
   async function restoreCache(): Promise<CachedResource> {
     const stored = localStorage.getItem(storageKey);
-    console.log(stored);
     if (stored) {
       return JSON.parse(await decompress(stored)) as CachedResource;
     }

@@ -1,15 +1,11 @@
 <template>
   <table class="list">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Image</th>
-        <th>Pokemon</th>
-        <th>Link</th>
-      </tr>
-    </thead>
     <tbody>
-      <tr v-for="pokemon of pokemons">
+      <tr
+        v-for="pokemon of pokemons"
+        v-show="
+          !$route.query.q || pokemon.name?.includes($route.query.q as string)
+        ">
         <td>{{ pokemon.id }}</td>
         <td>
           <img

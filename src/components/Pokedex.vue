@@ -6,9 +6,13 @@
         <slot />
       </div>
     </div>
-    <div class="pokedex__controls"></div>
+    <div class="pokedex__controls"><Controls /></div>
   </div>
 </template>
+
+<script lang="ts" setup>
+import Controls from '@/components/Controls.vue';
+</script>
 
 <style scoped lang="scss">
 .pokedex {
