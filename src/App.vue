@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import Pokedex from './components/Pokedex.vue'
+import Pokedex from './components/Pokedex.vue';
 </script>
 
 <style scoped lang="scss">

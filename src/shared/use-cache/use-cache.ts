@@ -1,4 +1,4 @@
-import { compress, decompress } from "smol-string/worker";
+import { compress, decompress } from 'smol-string/worker';
 
 interface CachedResource {
   [key: string]: string;
@@ -6,7 +6,7 @@ interface CachedResource {
 
 interface UseCache {
   search(key: string): string | null;
-  save(key: string, value: string): void
+  save(key: string, value: string): void;
 }
 
 const STORE_AFTER_SAVE_TIMES = 10;
@@ -40,7 +40,7 @@ async function setup(): Promise<UseCache> {
     if (requestSinceLastStorage > STORE_AFTER_SAVE_TIMES && !persisting) {
       persisting = true;
       persist().then(() => {
-        persisting = false
+        persisting = false;
         requestSinceLastStorage = 0;
       });
     }

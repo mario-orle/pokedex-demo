@@ -33,7 +33,7 @@
     border-radius: 15px;
     position: relative;
     ::after {
-      content: "";
+      content: '';
       border-top: 30px solid #b0b0b0;
       border-left: 30px solid #c00d0d;
       height: 0;

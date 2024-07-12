@@ -26,7 +26,7 @@
     /* Additions */
     "paths": {
       "@/*": ["./src/*"]
-    },
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
 }
