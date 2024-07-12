@@ -1,20 +1,24 @@
-export interface ListPokemon {
+interface BasePokemon {
   name: string;
+}
+
+export interface ListPokemon extends BasePokemon {
   url: string;
 }
 
-export interface Pokemon {
-  id: number;
-  name: string;
-  base_experience: number;
-  height: number;
-  is_default: boolean;
-  order: number;
-  weight: number;
-  sprites: Partial<Sprites>;
-  cries: Cries;
-  requested: boolean;
-}
+export interface Pokemon
+  extends BasePokemon,
+    Partial<{
+      id: number;
+      base_experience: number;
+      height: number;
+      is_default: boolean;
+      order: number;
+      weight: number;
+      sprites: Partial<Sprites>;
+      cries: Cries;
+      requested: boolean;
+    }> {}
 
 interface Sprites {
   back_default: string;

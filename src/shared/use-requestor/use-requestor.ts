@@ -50,25 +50,22 @@ function setup(): UseRequestor {
       batch.map((r) => cachedFetch(r.url).then((res) => r.callback(res))),
     ).then(() => {
       if (requests.length) {
-        batchRequestor();
-      } else {
-        working = false;
+        return batchRequestor();
       }
+      working = false;
     });
   }
 
-  async function cachedFetch<T>(
-    ...fetchParams: Parameters<typeof fetch>
-  ): Promise<T> {
+  async function cachedFetch<T>(url: string): Promise<T> {
     const { search, save } = await useCache();
-    const cached = search(fetchParams[0].toString());
+    const cached = search(url);
     if (cached) {
       return JSON.parse(cached);
     }
-    return fetch(...fetchParams)
+    return fetch(url)
       .then((res) => res.text())
       .then((res) => {
-        save(fetchParams[0].toString(), res);
+        save(url, res);
         return JSON.parse(res);
       });
   }

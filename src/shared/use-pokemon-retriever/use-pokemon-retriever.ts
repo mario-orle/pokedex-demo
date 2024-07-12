@@ -4,7 +4,7 @@ import { Paginated } from '@/models/list';
 import { useRequestor } from '@/shared/use-requestor';
 
 interface UsePokemonRetriever {
-  pokemons: Ref<Partial<Pokemon>[]>;
+  pokemons: Ref<Pokemon[]>;
   getByName(name: string): Promise<Pokemon>;
 }
 const apiBaseUrl = 'https://pokeapi.co/api/v2';
@@ -19,7 +19,7 @@ export function usePokemonRetriever(): UsePokemonRetriever {
 }
 
 function setup(): UsePokemonRetriever {
-  const pokemons = ref<Partial<Pokemon>[]>([]);
+  const pokemons = ref<Pokemon[]>([]);
   const { addRequest, addPriorityRequest } = useRequestor();
 
   async function getByName(name: string): Promise<Pokemon> {
