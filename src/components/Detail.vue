@@ -5,13 +5,16 @@
 </template>
 
 <script setup lang="ts">
+
+import { usePokemonRetriever } from '@/shared/use-pokemon-retriever';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
+const { getByName } = usePokemonRetriever();
 
 const pokemon = ref();
-fetch(`https://pokeapi.co/api/v2/pokemon/${route.params.id}`).then(res => res.json()).then(res => pokemon.value = res);
+getByName(route.params.name as string).then(pokemonResponse => pokemon.value = pokemonResponse);
 
 </script>
 

@@ -9,10 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "smol-string": "^1.0.3",
     "vue": "^3.4.29",
     "vue-router": "^4.4.0"
   },
   "devDependencies": {
+    "@types/node": "^20.14.10",
     "@vitejs/plugin-vue": "^5.0.5",
     "sass": "^1.77.8",
     "typescript": "^5.2.2",
