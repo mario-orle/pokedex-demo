@@ -18,7 +18,11 @@ function setup(): UseCache {
   }
 
   function restore(key: string) {
-    return JSON.parse(localStorage.getItem(key) ?? '{}');
+    const item = localStorage.getItem(key);
+    if (!item) {
+      return null;
+    }
+    return JSON.parse(item);
   }
 
   return { save, restore };
