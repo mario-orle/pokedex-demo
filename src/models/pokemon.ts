@@ -9,6 +9,7 @@ export interface ListPokemon extends BasePokemon {
 export interface Pokemon
   extends BasePokemon,
     Partial<{
+      requested: boolean;
       id: number;
       base_experience: number;
       height: number;
@@ -17,9 +18,20 @@ export interface Pokemon
       weight: number;
       sprites: Partial<Sprites>;
       cries: Cries;
-      requested: boolean;
+      types: Types[];
+      moves: Moves[];
     }> {}
 
+interface Moves {
+  move: {
+    name: string;
+    url: string;
+  };
+}
+interface Types {
+  slot: number;
+  type: { name: string; url: string };
+}
 interface Sprites {
   back_default: string;
   back_female: string;

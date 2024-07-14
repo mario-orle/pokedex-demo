@@ -12,3 +12,73 @@ body,
   font-family: "Rubik Mono One", monospace;
   font-size: 10px;
 }
+
+.pokemon-type {
+  padding: 5px;
+  border: 1px solid #333;
+  border-radius: 5px;
+
+  &__bug {
+    background-color: #91A119;
+  }
+  &__dark {
+    background-color: #614C4E;
+  }
+  &__dragon {
+    background-color: #4F60E1;
+  }
+  &__electric {
+    background-color: #FABF00;
+  }
+  &__fairy {
+    background-color: #EF70EF;
+  }
+  &__fighting {
+    background-color: #FE7F00;
+  }
+  &__fire {
+    background-color: #E52829;
+  }
+  &__flying {
+    background-color: #81B8EF;
+  }
+  &__ghost {
+    background-color: #6F416F;
+  }
+  &__grass {
+    background-color: #3DA129;
+  }
+  &__ground {
+    background-color: #905120;
+  }
+  &__ice {
+    background-color: #3CCEF3;
+  }
+  &__normal {
+    background-color: #A0A19F;
+  }
+  &__poison {
+    background-color: #9141CB
+  }
+  &__psychic {
+    background-color: #EE4178;
+  }
+  &__rock {
+    background-color: #AFA982;
+  }
+  &__shadow {
+    background-color: #943994;
+  }
+  &__steel {
+    background-color: #5FA1B8;
+  }
+  &__stellar {
+    background-color: #40B5A5;
+  }
+  &__unknown {
+    background-color: #68A090;
+  }
+  &__water {
+    background-color: #2880EE;
+  }
+}
