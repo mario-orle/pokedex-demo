@@ -43,11 +43,18 @@ function setup(): UsePokemonRetriever {
     addPriorityRequest<Paginated<ListPokemonApi>>(
       url,
       async (paginatedPokemons) => {
-        paginatedPokemons.results.map((partialPokemon) =>
-          pokemonList.value.push({
-            name: partialPokemon.name,
-            requested: false,
-          }),
+        // if we have full list, we dont start again
+        if (pokemonList.value.length === paginatedPokemons.count) {
+          backgroundEnrichment();
+          return;
+        }
+        paginatedPokemons.results.map(
+          (partialPokemon) =>
+            !pokemonList.value.find((p) => p.name === partialPokemon.name) &&
+            pokemonList.value.push({
+              name: partialPokemon.name,
+              requested: false,
+            }),
         );
         backgroundEnrichment();
         if (!paginatedPokemons.next) {
@@ -60,9 +67,7 @@ function setup(): UsePokemonRetriever {
   }
 
   function backgroundEnrichment(): void {
-    const batch = pokemonList.value.filter(
-      (pokemon) => !pokemon.requested && !pokemon.id,
-    );
+    const batch = pokemonList.value.filter((pokemon) => !pokemon.id);
     batch.forEach((pokemon) => {
       pokemon.requested = true;
       addRequest<PokemonApi>(

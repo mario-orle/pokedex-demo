@@ -1,4 +1,5 @@
 <template>
+  <router-link to="/">List</router-link>
   <div v-if="pokemon" class="detail">
     <div class="detail__section">
       <div class="detail__text">

@@ -1,6 +1,4 @@
 <template>
-  {{ $route.query.t }}
-
   <table class="list">
     <tbody>
       <tr

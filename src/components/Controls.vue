@@ -29,23 +29,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import * as typeIcons from '@/assets/types';
 
 const router = useRouter();
-const query = ref(useRoute().query.q);
+const query = ref<string>();
 const types = ref(Object.keys(typeIcons));
 
-if (Array.isArray(useRoute().query.t)) {
-  types.value = useRoute().query.t as string[];
-}
-if (useRoute().query.t) {
-  types.value = [useRoute().query.t as string];
-}
 function onInput() {
   router.replace({ query: { q: query.value, t: types.value } });
 }
+
+onMounted(() => {
+  query.value = useRoute().query.q as string;
+  if (Array.isArray(useRoute().query.t)) {
+    types.value = useRoute().query.t as string[];
+  }
+  if (useRoute().query.t) {
+    types.value = [useRoute().query.t as string];
+  }
+});
 </script>
 
 <style scoped lang="scss">
