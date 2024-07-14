@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { Pokemon } from '@/models/pokemon';
+import { PokemonApi } from '@/models/pokemon';
 import { usePokemonRetriever } from '@/shared/use-pokemon-retriever';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
@@ -38,7 +38,7 @@ import * as typeIcons from '@/assets/types';
 const route = useRoute();
 const { getByName } = usePokemonRetriever();
 
-const pokemon = ref<Pokemon>();
+const pokemon = ref<PokemonApi>();
 getByName(route.params.name as string).then(
   (pokemonResponse) => (pokemon.value = pokemonResponse),
 );

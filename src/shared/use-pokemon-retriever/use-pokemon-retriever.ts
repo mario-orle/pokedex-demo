@@ -1,11 +1,12 @@
 import { ref, Ref } from 'vue';
-import { ListPokemon, Pokemon } from '@/models/pokemon';
+import { ListPokemonApi, ListPokemonView, PokemonApi } from '@/models/pokemon';
 import { Paginated } from '@/models/list';
 import { useRequestor } from '@/shared/use-requestor';
+import { useCache } from '../use-cache';
 
 interface UsePokemonRetriever {
-  pokemons: Ref<Pokemon[]>;
-  getByName(name: string): Promise<Pokemon>;
+  pokemonList: Ref<ListPokemonView[]>;
+  getByName(name: string): Promise<PokemonApi>;
 }
 const apiBaseUrl = 'https://pokeapi.co/api/v2';
 const defaultPageSize = 20;
@@ -19,12 +20,14 @@ export function usePokemonRetriever(): UsePokemonRetriever {
 }
 
 function setup(): UsePokemonRetriever {
-  const pokemons = ref<Pokemon[]>([]);
+  const pokemonList = ref<ListPokemonView[]>(
+    useCache().restore('pokemon-list-view') ?? [],
+  );
   const { addRequest, addPriorityRequest } = useRequestor();
 
-  async function getByName(name: string): Promise<Pokemon> {
+  async function getByName(name: string): Promise<PokemonApi> {
     return new Promise((res) => {
-      addPriorityRequest<Pokemon>(
+      addPriorityRequest<PokemonApi>(
         `${apiBaseUrl}/pokemon/${name}`,
         (pokemonResponse) => {
           enrichPokemon(pokemonResponse);
@@ -37,14 +40,18 @@ function setup(): UsePokemonRetriever {
   function pokemonListRetriever(
     url = `${apiBaseUrl}/pokemon?limit=${defaultPageSize}`,
   ): void {
-    addPriorityRequest<Paginated<ListPokemon>>(
+    addPriorityRequest<Paginated<ListPokemonApi>>(
       url,
       async (paginatedPokemons) => {
         paginatedPokemons.results.map((partialPokemon) =>
-          pokemons.value.push({ name: partialPokemon.name }),
+          pokemonList.value.push({
+            name: partialPokemon.name,
+            requested: false,
+          }),
         );
         backgroundEnrichment();
         if (!paginatedPokemons.next) {
+          useCache().save('pokemon-list-view', pokemonList.value);
           return;
         }
         pokemonListRetriever(paginatedPokemons.next);
@@ -53,30 +60,42 @@ function setup(): UsePokemonRetriever {
   }
 
   function backgroundEnrichment(): void {
-    const batch = pokemons.value.filter(
+    const batch = pokemonList.value.filter(
       (pokemon) => !pokemon.requested && !pokemon.id,
     );
     batch.forEach((pokemon) => {
       pokemon.requested = true;
-      addRequest<Pokemon>(
+      addRequest<PokemonApi>(
         `${apiBaseUrl}/pokemon/${pokemon.name}`,
         enrichPokemon,
       );
     });
   }
 
-  function enrichPokemon(pokemonResponse: Pokemon) {
-    const idx = pokemons.value.findIndex(
+  function enrichPokemon(pokemonResponse: PokemonApi) {
+    const pokemon = pokemonList.value.find(
       (p) => p.name === pokemonResponse.name,
     );
-    pokemons.value[idx] = {
-      ...pokemons.value[idx],
-      ...pokemonResponse,
-      requested: true,
-    };
+    if (!pokemon) {
+      return;
+    }
+
+    pokemon.id = pokemonResponse.id;
+    pokemon.image = pokemonResponse.sprites?.front_default;
+    pokemon.types = pokemonResponse.types?.map((t) => t.type.name);
+    pokemon.requested = true;
+
+    useCache().save('pokemon-list-view', pokemonList.value);
   }
 
-  pokemonListRetriever();
+  if (
+    !(
+      pokemonList.value.length > 100 &&
+      !pokemonList.value.find((p) => !p.requested || !p.id)
+    )
+  ) {
+    pokemonListRetriever();
+  }
 
-  return { pokemons, getByName };
+  return { pokemonList, getByName };
 }

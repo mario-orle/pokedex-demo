@@ -1,5 +1,3 @@
-import { useCache } from '@/shared/use-cache';
-
 interface Request {
   url: string;
   callback: (data: any) => void;
@@ -47,27 +45,17 @@ function setup(): UseRequestor {
     const batchSize = Math.min(MAX_CONCURRENT_REQUESTS, requests.length);
     const batch = requests.splice(0, batchSize);
     Promise.all(
-      batch.map((r) => cachedFetch(r.url).then((res) => r.callback(res))),
+      batch.map((r) =>
+        fetch(r.url)
+          .then((res) => res.json())
+          .then((res) => r.callback(res)),
+      ),
     ).then(() => {
       if (requests.length) {
         return batchRequestor();
       }
       working = false;
     });
-  }
-
-  async function cachedFetch<T>(url: string): Promise<T> {
-    const { search, save } = await useCache();
-    const cached = search(url);
-    if (cached) {
-      return JSON.parse(cached);
-    }
-    return fetch(url)
-      .then((res) => res.text())
-      .then((res) => {
-        save(url, res);
-        return JSON.parse(res);
-      });
   }
 
   return { addRequest, addPriorityRequest };

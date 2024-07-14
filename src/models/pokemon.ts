@@ -2,14 +2,20 @@ interface BasePokemon {
   name: string;
 }
 
-export interface ListPokemon extends BasePokemon {
+export interface ListPokemonView extends BasePokemon {
+  id?: number;
+  image?: string;
+  types?: string[];
+  requested: boolean;
+}
+
+export interface ListPokemonApi extends BasePokemon {
   url: string;
 }
 
-export interface Pokemon
+export interface PokemonApi
   extends BasePokemon,
     Partial<{
-      requested: boolean;
       id: number;
       base_experience: number;
       height: number;

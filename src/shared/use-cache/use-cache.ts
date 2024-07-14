@@ -1,61 +1,25 @@
-import { compress, decompress } from 'smol-string/worker';
-import { ref } from 'vue';
-
-interface CachedResource {
-  [key: string]: string;
-}
-
 interface UseCache {
-  search(key: string): string | null;
-  save(key: string, value: string): void;
+  restore<T>(key: string): T | null;
+  save(key: string, value: unknown): void;
 }
-
-const STORE_AFTER_SAVE_TIMES = 10;
-const storageKey = 'compressed-pokemon-cache';
 
 let instance: UseCache;
 
-export async function useCache(): Promise<UseCache> {
+export function useCache(): UseCache {
   if (!instance) {
-    instance = await setup();
+    instance = setup();
   }
   return instance;
 }
 
-async function setup(): Promise<UseCache> {
-  let cache: CachedResource = await restoreCache();
-  const persisting = ref(false);
-
-  async function restoreCache(): Promise<CachedResource> {
-    const stored = localStorage.getItem(storageKey);
-    if (stored) {
-      return JSON.parse(await decompress(stored)) as CachedResource;
-    }
-    return {};
-  }
-  let requestSinceLastStorage = 0;
-  function save(key: string, value: string) {
-    cache[key] = value;
-    requestSinceLastStorage++;
-    if (
-      requestSinceLastStorage >= STORE_AFTER_SAVE_TIMES &&
-      persisting.value === false
-    ) {
-      persisting.value = true;
-      persist().then(() => {
-        persisting.value = false;
-        requestSinceLastStorage = 0;
-      });
-    }
+function setup(): UseCache {
+  function save(key: string, value: unknown) {
+    localStorage.setItem(key, JSON.stringify(value));
   }
 
-  async function persist() {
-    localStorage.setItem(storageKey, await compress(JSON.stringify(cache)));
+  function restore(key: string) {
+    return JSON.parse(localStorage.getItem(key) ?? '{}');
   }
 
-  function search(key: string) {
-    return cache[key];
-  }
-
-  return { save, search };
+  return { save, restore };
 }
