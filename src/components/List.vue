@@ -6,7 +6,9 @@
         v-for="pokemon of pokemonList"
         v-show="
           (!$route.query.q ||
-            pokemon.name?.includes($route.query.q as string)) &&
+            pokemon.name
+              ?.toLowerCase()
+              .includes(($route.query.q as string).toLowerCase())) &&
           (!$route.query.t?.length ||
             !pokemon.types ||
             pokemon.types.find((t) => $route.query.t?.includes(t)))
