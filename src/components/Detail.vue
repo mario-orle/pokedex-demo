@@ -6,19 +6,17 @@
         <h2>#{{ pokemon.id }} {{ pokemon.name }}</h2>
         <h3>Types</h3>
         <div class="detail__types">
-          <PokeType v-for="slot of pokemon.types" :type="slot.type.name" />
+          <PokeType v-for="type of pokemon.types" :type="type" />
         </div>
       </div>
       <div class="detail__image">
-        <img
-          v-if="pokemon.sprites?.front_default"
-          :src="pokemon.sprites.front_default" />
+        <img v-if="pokemon.image" :src="pokemon.image" />
       </div>
       <div class="detail_last_section">
         <h3>Moves</h3>
         <ul class="detail__moves">
-          <li class="detail__move" v-for="{ move } of pokemon.moves">
-            {{ move.name }}
+          <li class="detail__move" v-for="move of pokemon.moves">
+            {{ move }}
           </li>
         </ul>
       </div>
@@ -28,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { PokemonApi } from '@/models/pokemon';
+import { ListPokemonView } from '@/models/pokemon';
 import { usePokemonRetriever } from '@/shared/use-pokemon-retriever';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
@@ -37,7 +35,7 @@ import PokeType from './PokeType.vue';
 const route = useRoute();
 const { getByName } = usePokemonRetriever();
 
-const pokemon = ref<PokemonApi>();
+const pokemon = ref<ListPokemonView>();
 getByName(route.params.name as string).then(
   (pokemonResponse) => (pokemon.value = pokemonResponse),
 );

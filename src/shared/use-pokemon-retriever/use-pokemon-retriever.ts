@@ -6,7 +6,7 @@ import { useCache } from '../use-cache';
 
 interface UsePokemonRetriever {
   pokemonList: Ref<ListPokemonView[]>;
-  getByName(name: string): Promise<PokemonApi>;
+  getByName(name: string): Promise<ListPokemonView>;
 }
 const apiBaseUrl = 'https://pokeapi.co/api/v2';
 const defaultPageSize = 20;
@@ -25,19 +25,20 @@ function setup(): UsePokemonRetriever {
   );
   const { addRequest, addPriorityRequest } = useRequestor();
 
-  async function getByName(name: string): Promise<PokemonApi> {
+  async function getByName(name: string): Promise<ListPokemonView> {
     return new Promise((res) => {
       const storedPokemon = pokemonList.value.find(
         (p) => p.name === name && p.id,
       );
       if (storedPokemon) {
-        return storedPokemon;
+        res(storedPokemon);
+        return;
       }
       addPriorityRequest<PokemonApi>(
         `${apiBaseUrl}/pokemon/${name}`,
         (pokemonResponse) => {
-          enrichPokemon(pokemonResponse);
-          res(pokemonResponse);
+          const storedPokemon = enrichPokemon(pokemonResponse);
+          res(storedPokemon!);
         },
       );
     });
@@ -83,7 +84,9 @@ function setup(): UsePokemonRetriever {
     });
   }
 
-  function enrichPokemon(pokemonResponse: PokemonApi) {
+  function enrichPokemon(
+    pokemonResponse: PokemonApi,
+  ): ListPokemonView | undefined {
     const pokemon = pokemonList.value.find(
       (p) => p.name === pokemonResponse.name,
     );
@@ -94,9 +97,11 @@ function setup(): UsePokemonRetriever {
     pokemon.id = pokemonResponse.id;
     pokemon.image = pokemonResponse.sprites?.front_default;
     pokemon.types = pokemonResponse.types?.map((t) => t.type.name);
+    pokemon.moves = pokemonResponse.moves?.map((m) => m.move.name);
     pokemon.requested = true;
 
     useCache().save('pokemon-list-view', pokemonList.value);
+    return pokemon;
   }
 
   pokemonListRetriever();

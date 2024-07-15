@@ -7,6 +7,7 @@ export interface ListPokemonView extends BasePokemon {
   image?: string;
   types?: string[];
   requested: boolean;
+  moves?: string[];
 }
 
 export interface ListPokemonApi extends BasePokemon {
