@@ -22,8 +22,15 @@
     </div>
     <div class="controls__dpad">
       <div class="controls__dpad-container">
-        <div v-for="idx in 3" :key="`row${idx}`" class="controls__dpad-row">
-          <div v-for="idx in 3" :key="`col${idx}`" class="controls__dpad-col">
+        <div
+          v-for="rowidx in 3"
+          :key="`row${rowidx}`"
+          class="controls__dpad-row">
+          <div
+            v-for="idx in 3"
+            :key="`col${idx}`"
+            class="controls__dpad-col"
+            @click="idx == 1 ? up() : down()">
             &nbsp;
           </div>
         </div>
@@ -41,17 +48,38 @@ import PokeType from '@/components/PokeType.vue';
 const router = useRouter();
 const query = ref<string>();
 const types = ref(Object.keys(typeIcons));
+const route = useRoute();
 
 function onInput() {
   router.replace({ query: { q: query.value, t: types.value.join(',') } });
 }
 
+function up() {
+  router.replace({
+    query: {
+      q: query.value,
+      t: types.value.join(','),
+      s: Number.parseInt((route.query.s as string) ?? '20') - 100,
+    },
+  });
+}
+
+function down() {
+  router.replace({
+    query: {
+      q: query.value,
+      t: types.value.join(','),
+      s: Number.parseInt((route.query.s as string) ?? '0') + 100,
+    },
+  });
+}
+
 onMounted(() => {
-  if (useRoute().query.q) {
-    query.value = useRoute().query.q as string;
+  if (route.query.q) {
+    query.value = route.query.q as string;
   }
-  if (useRoute().query.t) {
-    types.value = (useRoute().query.t as string).split(',');
+  if (route.query.t) {
+    types.value = (route.query.t as string).split(',');
   }
 });
 </script>
