@@ -36,7 +36,7 @@
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import * as typeIcons from '@/assets/types';
-import PokeType from './PokeType.vue';
+import PokeType from '@/components/PokeType.vue';
 
 const router = useRouter();
 const query = ref<string>();

@@ -30,7 +30,7 @@ import { PokemonView } from '@/models/pokemon';
 import { usePokemonRetriever } from '@/shared/use-pokemon-retriever';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
-import PokeType from './PokeType.vue';
+import PokeType from '@/components/PokeType.vue';
 
 const route = useRoute();
 const { getByName } = usePokemonRetriever();
