@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 import Controls from '@/components/Controls.vue';
-import { onMounted, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -22,12 +22,6 @@ const screen = ref<HTMLTableElement>();
 function onScroll(_: Event) {
   router.replace({ query: { ...route.query, s: screen.value?.scrollTop } });
 }
-onMounted(() => {
-  if (!screen.value) {
-    return;
-  }
-  screen.value.scrollTop = Number.parseInt((route.query.s as string) ?? '0');
-});
 
 watch(
   () => route.query.s,

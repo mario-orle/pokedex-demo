@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import * as typeIcons from '@/assets/types';
 import PokeType from '@/components/PokeType.vue';
@@ -59,7 +59,7 @@ function up() {
     query: {
       q: query.value,
       t: types.value.join(','),
-      s: Number.parseInt((route.query.s as string) ?? '20') - 100,
+      s: Math.min(0, Number.parseInt((route.query.s as string) ?? '0') - 100),
     },
   });
 }
@@ -74,14 +74,23 @@ function down() {
   });
 }
 
-onMounted(() => {
-  if (route.query.q) {
+watch(
+  () => route.query.q,
+  () => {
     query.value = route.query.q as string;
-  }
-  if (route.query.t) {
-    types.value = (route.query.t as string).split(',');
-  }
-});
+  },
+);
+
+watch(
+  () => route.query.t,
+  () => {
+    if (!route.query.t) {
+      types.value = Object.keys(typeIcons);
+      return;
+    }
+    types.value = ((route.query.t as string) ?? '').split(',');
+  },
+);
 </script>
 
 <style scoped lang="scss">
