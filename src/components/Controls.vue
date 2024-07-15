@@ -7,9 +7,7 @@
       </div>
       <h3>Types:</h3>
       <div class="controls__filter-types">
-        <label
-          v-for="(typeIcon, key) of typeIcons"
-          class="controls__filter-type">
+        <label v-for="(_, key) of typeIcons" class="controls__filter-type">
           <PokeType
             :type="key"
             :class="{ unselected: !types.includes(key) }"

@@ -8,17 +8,19 @@
         <div class="detail__types">
           <PokeType v-for="slot of pokemon.types" :type="slot.type.name" />
         </div>
+      </div>
+      <div class="detail__image">
+        <img
+          v-if="pokemon.sprites?.front_default"
+          :src="pokemon.sprites.front_default" />
+      </div>
+      <div class="detail_last_section">
         <h3>Moves</h3>
         <ul class="detail__moves">
           <li class="detail__move" v-for="{ move } of pokemon.moves">
             {{ move.name }}
           </li>
         </ul>
-      </div>
-      <div class="detail__image">
-        <img
-          v-if="pokemon.sprites?.front_default"
-          :src="pokemon.sprites.front_default" />
       </div>
     </div>
     <div v-else>Loading...</div>
@@ -30,7 +32,6 @@ import { PokemonApi } from '@/models/pokemon';
 import { usePokemonRetriever } from '@/shared/use-pokemon-retriever';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
-import * as typeIcons from '@/assets/types';
 import PokeType from './PokeType.vue';
 
 const route = useRoute();
@@ -51,6 +52,7 @@ getByName(route.params.name as string).then(
     width: 100%;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
   }
 
   &__text {
