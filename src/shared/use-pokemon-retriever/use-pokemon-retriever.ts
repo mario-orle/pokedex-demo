@@ -93,14 +93,7 @@ function setup(): UsePokemonRetriever {
     useCache().save('pokemon-list-view', pokemonList.value);
   }
 
-  if (
-    !(
-      pokemonList.value.length > 100 &&
-      !pokemonList.value.find((p) => !p.requested || !p.id)
-    )
-  ) {
-    pokemonListRetriever();
-  }
+  pokemonListRetriever();
 
   return { pokemonList, getByName };
 }
