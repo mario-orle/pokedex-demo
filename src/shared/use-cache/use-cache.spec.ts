@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useCache } from '.';
-import { flushPromises } from '@vue/test-utils';
 
 const localStorageMock = {
   getItem: vi.fn(),
@@ -13,20 +12,19 @@ describe('testing use-cache', () => {
     localStorageMock.setItem.mockClear();
     localStorageMock.getItem.mockClear();
   });
-  it('should be able to cache arbitrary strings indexing with a string', async () => {
-    const { save, restore } = await useCache();
+  it('should be able to cache arbitrary strings indexing with a string', () => {
+    const { save, restore } = useCache();
     expect(restore('not-existing')).toBeNull();
 
     save('test', 'value');
     expect(localStorageMock.setItem).toHaveBeenCalledWith('test', '"value"');
   });
 
-  it('should uncompress and load stored data on instantiation', async () => {
+  it('should load stored data on instantiation', async () => {
     localStorageMock.getItem.mockImplementationOnce(() =>
       JSON.stringify('value'),
     );
-    const { restore } = await useCache();
-    await flushPromises();
+    const { restore } = useCache();
     expect(restore('cached')).toBe('value');
   });
 });

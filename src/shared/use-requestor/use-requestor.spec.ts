@@ -13,13 +13,6 @@ const fetchMock = vi.fn(() =>
 );
 vi.stubGlobal('fetch', fetchMock);
 
-vi.mock('@/shared/use-cache', () => ({
-  useCache: () => ({
-    search: vi.fn(),
-    save: vi.fn(),
-  }),
-}));
-
 describe('testing use-requestor', () => {
   const callback = vi.fn();
   beforeEach(() => {
