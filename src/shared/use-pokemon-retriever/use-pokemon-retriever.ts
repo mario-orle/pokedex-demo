@@ -27,6 +27,12 @@ function setup(): UsePokemonRetriever {
 
   async function getByName(name: string): Promise<PokemonApi> {
     return new Promise((res) => {
+      const storedPokemon = pokemonList.value.find(
+        (p) => p.name === name && p.id,
+      );
+      if (storedPokemon) {
+        return storedPokemon;
+      }
       addPriorityRequest<PokemonApi>(
         `${apiBaseUrl}/pokemon/${name}`,
         (pokemonResponse) => {
