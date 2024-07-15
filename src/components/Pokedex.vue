@@ -36,7 +36,7 @@ import Controls from '@/components/Controls.vue';
     background-color: #b0b0b0;
     border-radius: 15px;
     position: relative;
-    ::after {
+    &::after {
       content: '';
       border-top: 30px solid #b0b0b0;
       border-left: 30px solid #c00d0d;

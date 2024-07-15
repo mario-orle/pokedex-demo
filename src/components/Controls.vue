@@ -2,9 +2,10 @@
   <div class="controls">
     <div class="controls__filters">
       <div class="controls__filter-text">
-        <label for="query">Filter</label>
+        <label for="query"><h3>Filter:</h3></label>
         <input @input="onInput" v-model="query" id="query" />
       </div>
+      <h3>Displayed types:</h3>
       <div class="controls__filter-types">
         <label
           v-for="(typeIcon, key) of typeIcons"
@@ -24,7 +25,15 @@
         </label>
       </div>
     </div>
-    <div class="controls__dpad"></div>
+    <div class="controls__dpad">
+      <div class="controls__dpad-container">
+        <div v-for="idx in 3" :key="`row${idx}`" class="controls__dpad-row">
+          <div v-for="idx in 3" :key="`col${idx}`" class="controls__dpad-col">
+            &nbsp;
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -38,16 +47,15 @@ const query = ref<string>();
 const types = ref(Object.keys(typeIcons));
 
 function onInput() {
-  router.replace({ query: { q: query.value, t: types.value } });
+  router.replace({ query: { q: query.value, t: types.value.join(',') } });
 }
 
 onMounted(() => {
-  query.value = useRoute().query.q as string;
-  if (Array.isArray(useRoute().query.t)) {
-    types.value = useRoute().query.t as string[];
+  if (useRoute().query.q) {
+    query.value = useRoute().query.q as string;
   }
   if (useRoute().query.t) {
-    types.value = [useRoute().query.t as string];
+    types.value = (useRoute().query.t as string).split(',');
   }
 });
 </script>
@@ -56,8 +64,13 @@ onMounted(() => {
 .controls {
   padding: 10px;
   display: flex;
+  $component-class: &;
+
   &__filters {
     width: 50%;
+    display: flex;
+    flex-flow: column;
+    gap: 10px;
   }
 
   &__filter-types {
@@ -79,6 +92,30 @@ onMounted(() => {
 
   &__dpad {
     width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__dpad-container {
+    padding-top: 30px;
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+  }
+  &__dpad-row {
+    &:first-of-type,
+    &:last-of-type {
+      #{$component-class}__dpad-col:first-of-type,
+      #{$component-class}__dpad-col:last-of-type {
+        background: none;
+      }
+    }
+  }
+  &__dpad-col {
+    width: 40px;
+    height: 40px;
+    background-color: #333;
   }
 }
 </style>

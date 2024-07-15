@@ -10,7 +10,8 @@
           (!$route.query.t?.length ||
             !pokemon.types ||
             pokemon.types.find((t) => $route.query.t?.includes(t)))
-        ">
+        "
+        class="list__row">
         <td class="list__id">{{ pokemon.id }}</td>
         <td class="list__sprite">
           <img v-if="pokemon.image" :src="pokemon.image" />
@@ -38,7 +39,18 @@ const { pokemonList } = usePokemonRetriever();
 .list {
   padding: 10px;
 
+  &__row {
+    height: 40px;
+  }
+
+  &__id {
+    max-width: 20px;
+  }
+  &__image {
+    width: 40px;
+  }
   &__types {
+    width: 60px;
     display: flex;
     img {
       width: 25px;

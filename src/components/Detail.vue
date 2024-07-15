@@ -1,7 +1,7 @@
 <template>
-  <router-link to="/">List</router-link>
-  <div v-if="pokemon" class="detail">
-    <div class="detail__section">
+  <div class="detail">
+    <router-link to="/">< List</router-link>
+    <div v-if="pokemon" class="detail__section">
       <div class="detail__text">
         <h2>#{{ pokemon.id }} {{ pokemon.name }}</h2>
         <h3>Types</h3>
@@ -25,8 +25,8 @@
           :src="pokemon.sprites.front_default" />
       </div>
     </div>
+    <div v-else>Loading...</div>
   </div>
-  <div v-else>Loading...</div>
 </template>
 
 <script setup lang="ts">
@@ -79,11 +79,14 @@ getByName(route.params.name as string).then(
     display: flex;
     flex-wrap: wrap;
     padding: 0;
+    gap: 5px;
   }
   &__move {
     border: 1px solid #ccc;
-    padding: 2px;
-    font-size: 8px;
+    padding: 5px;
+    background: #bbb;
+    border-radius: 5px;
+    font-size: 13px;
   }
 }
 </style>
