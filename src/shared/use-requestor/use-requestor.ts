@@ -48,14 +48,22 @@ function setup(): UseRequestor {
       batch.map((r) =>
         fetch(r.url)
           .then((res) => res.json())
-          .then((res) => r.callback(res)),
+          .then((res) => r.callback(res))
+          .catch((_) => r.callback(null)),
       ),
-    ).then(() => {
-      if (requests.length) {
-        return batchRequestor();
-      }
-      working = false;
-    });
+    )
+      .then(() => {
+        if (requests.length) {
+          return batchRequestor();
+        }
+        working = false;
+      })
+      .catch(() => {
+        if (requests.length) {
+          return batchRequestor();
+        }
+        working = false;
+      });
   }
 
   return { addRequest, addPriorityRequest };
