@@ -20,11 +20,7 @@
         </td>
         <td class="list__name">{{ pokemon.name }}</td>
         <td class="list__types">
-          <img
-            v-for="type of pokemon.types"
-            :src="typeIcons[type as keyof typeof typeIcons]"
-            class="pokemon-type"
-            :class="`pokemon-type__${type}`" />
+          <PokeType v-for="type of pokemon.types" :type="type" />
         </td>
       </tr>
     </tbody>
@@ -33,7 +29,8 @@
 
 <script setup lang="ts">
 import { usePokemonRetriever } from '@/shared/use-pokemon-retriever';
-import * as typeIcons from '@/assets/types';
+import PokeType from '@/components/PokeType.vue';
+
 const { pokemonList } = usePokemonRetriever();
 </script>
 

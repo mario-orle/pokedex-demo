@@ -5,17 +5,14 @@
         <label for="query"><h3>Filter:</h3></label>
         <input @input="onInput" v-model="query" id="query" />
       </div>
-      <h3>Displayed types:</h3>
+      <h3>Types:</h3>
       <div class="controls__filter-types">
         <label
           v-for="(typeIcon, key) of typeIcons"
           class="controls__filter-type">
-          <img
-            :src="typeIcon"
-            :class="[
-              `pokemon-type__${key}`,
-              { unselected: !types.includes(key) },
-            ]"
+          <PokeType
+            :type="key"
+            :class="{ unselected: !types.includes(key) }"
             class="pokemon-type" />
           <input
             @change="onInput"
@@ -41,6 +38,7 @@
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import * as typeIcons from '@/assets/types';
+import PokeType from './PokeType.vue';
 
 const router = useRouter();
 const query = ref<string>();
@@ -62,7 +60,7 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .controls {
-  padding: 10px;
+  padding: 0 10px;
   display: flex;
   $component-class: &;
 

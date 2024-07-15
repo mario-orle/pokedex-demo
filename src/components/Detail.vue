@@ -6,11 +6,7 @@
         <h2>#{{ pokemon.id }} {{ pokemon.name }}</h2>
         <h3>Types</h3>
         <div class="detail__types">
-          <img
-            v-for="slot of pokemon.types"
-            :src="typeIcons[slot.type.name as keyof typeof typeIcons]"
-            class="pokemon-type"
-            :class="`pokemon-type__${slot.type.name}`" />
+          <PokeType v-for="slot of pokemon.types" :type="slot.type.name" />
         </div>
         <h3>Moves</h3>
         <ul class="detail__moves">
@@ -35,6 +31,7 @@ import { usePokemonRetriever } from '@/shared/use-pokemon-retriever';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import * as typeIcons from '@/assets/types';
+import PokeType from './PokeType.vue';
 
 const route = useRoute();
 const { getByName } = usePokemonRetriever();
