@@ -30,7 +30,7 @@
             v-for="idx in 3"
             :key="`col${idx}`"
             class="controls__dpad-col"
-            @click="idx == 1 ? up() : down()">
+            @click="rowidx !== 2 ? {} : idx == 1 ? up() : down()">
             &nbsp;
           </div>
         </div>
