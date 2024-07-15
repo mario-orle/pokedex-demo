@@ -1,6 +1,6 @@
 <template>
   <div class="detail">
-    <a @click="$router.go(-1)">< List</a>
+    <router-link to="/">< List</router-link>
     <div v-if="pokemon" class="detail__section">
       <div class="detail__text">
         <h2>#{{ pokemon.id }} {{ pokemon.name }}</h2>
