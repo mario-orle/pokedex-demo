@@ -43,7 +43,7 @@ function setup(): UsePokemonRetriever {
     addPriorityRequest<Paginated<ListPokemonApi>>(
       url,
       async (paginatedPokemons) => {
-        // if we have full list, we dont start again
+        // if we have full list, we dont start again retrieving list and will go to enrichment.
         if (pokemonList.value.length === paginatedPokemons.count) {
           backgroundEnrichment();
           return;
@@ -56,9 +56,9 @@ function setup(): UsePokemonRetriever {
               requested: false,
             }),
         );
-        backgroundEnrichment();
         if (!paginatedPokemons.next) {
           useCache().save('pokemon-list-view', pokemonList.value);
+          backgroundEnrichment();
           return;
         }
         pokemonListRetriever(paginatedPokemons.next);

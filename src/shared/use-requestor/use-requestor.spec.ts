@@ -9,7 +9,7 @@ const slowPromise = (resolveValue = '') =>
 const awaiter = (delay = 11) =>
   new Promise<void>((res) => setTimeout(() => res(), delay));
 const fetchMock = vi.fn(() =>
-  Promise.resolve({ text: () => Promise.resolve(response) }),
+  Promise.resolve({ json: () => Promise.resolve(response) }),
 );
 vi.stubGlobal('fetch', fetchMock);
 
@@ -30,7 +30,7 @@ describe('testing use-requestor', () => {
     const { addRequest } = useRequestor();
     addRequest('url', callback);
     await flushPromises();
-    expect(callback).toHaveBeenCalledWith({});
+    expect(callback).toHaveBeenCalledWith('{}');
     expect(fetchMock).toHaveBeenCalledWith('url');
   });
 
@@ -48,7 +48,7 @@ describe('testing use-requestor', () => {
   });
   it('should make a max of 4 concurrent request', async () => {
     fetchMock.mockImplementation(() =>
-      Promise.resolve({ text: () => slowPromise(response) }),
+      Promise.resolve({ json: () => slowPromise(response) }),
     );
     const { addRequest } = useRequestor();
     addRequest('url', callback);
