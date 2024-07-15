@@ -2,7 +2,7 @@ interface BasePokemon {
   name: string;
 }
 
-export interface ListPokemonView extends BasePokemon {
+export interface PokemonView extends BasePokemon {
   id?: number;
   image?: string;
   types?: string[];

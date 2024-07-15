@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ListPokemonView } from '@/models/pokemon';
+import { PokemonView } from '@/models/pokemon';
 import { usePokemonRetriever } from '@/shared/use-pokemon-retriever';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
@@ -35,7 +35,7 @@ import PokeType from './PokeType.vue';
 const route = useRoute();
 const { getByName } = usePokemonRetriever();
 
-const pokemon = ref<ListPokemonView>();
+const pokemon = ref<PokemonView>();
 getByName(route.params.name as string).then(
   (pokemonResponse) => (pokemon.value = pokemonResponse),
 );

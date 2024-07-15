@@ -76,6 +76,7 @@ describe('testing use-pokemon-retriever', () => {
         id: 25,
         image: 'test',
         types: undefined,
+        moves: undefined,
       },
     ]);
   });

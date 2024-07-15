@@ -1,12 +1,12 @@
 import { ref, Ref } from 'vue';
-import { ListPokemonApi, ListPokemonView, PokemonApi } from '@/models/pokemon';
+import { ListPokemonApi, PokemonView, PokemonApi } from '@/models/pokemon';
 import { Paginated } from '@/models/list';
 import { useRequestor } from '@/shared/use-requestor';
 import { useCache } from '../use-cache';
 
 interface UsePokemonRetriever {
-  pokemonList: Ref<ListPokemonView[]>;
-  getByName(name: string): Promise<ListPokemonView>;
+  pokemonList: Ref<PokemonView[]>;
+  getByName(name: string): Promise<PokemonView>;
 }
 const apiBaseUrl = 'https://pokeapi.co/api/v2';
 const defaultPageSize = 20;
@@ -20,12 +20,12 @@ export function usePokemonRetriever(): UsePokemonRetriever {
 }
 
 function setup(): UsePokemonRetriever {
-  const pokemonList = ref<ListPokemonView[]>(
+  const pokemonList = ref<PokemonView[]>(
     useCache().restore('pokemon-list-view') ?? [],
   );
   const { addRequest, addPriorityRequest } = useRequestor();
 
-  async function getByName(name: string): Promise<ListPokemonView> {
+  async function getByName(name: string): Promise<PokemonView> {
     return new Promise((res) => {
       const storedPokemon = pokemonList.value.find(
         (p) => p.name === name && p.id,
@@ -84,9 +84,7 @@ function setup(): UsePokemonRetriever {
     });
   }
 
-  function enrichPokemon(
-    pokemonResponse: PokemonApi,
-  ): ListPokemonView | undefined {
+  function enrichPokemon(pokemonResponse: PokemonApi): PokemonView | undefined {
     const pokemon = pokemonList.value.find(
       (p) => p.name === pokemonResponse.name,
     );
